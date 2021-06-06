@@ -1,4 +1,4 @@
-package com.mycompany.util;
+package com.kozdemirhasan.encryptednotes.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,10 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
-import com.mycompany.database.NotesDatabase;
-import com.mycompany.mynotes.R;
-import com.mycompany.pojo.Crypt;
-import com.mycompany.pojo.Sabitler;
+import com.kozdemirhasan.encryptednotes.database.NotesDatabase;
+import com.kozdemirhasan.encryptednotes.R;
+import com.kozdemirhasan.encryptednotes.pojo.Crypt;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 import java.util.ArrayList;
 

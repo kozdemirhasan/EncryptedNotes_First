@@ -1,8 +1,6 @@
-package com.mycompany.util;
+package com.kozdemirhasan.encryptednotes.util;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,22 +8,13 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.mycompany.database.NotesDatabase;
-import com.mycompany.database.UserDatabase;
-import com.mycompany.mynotes.R;
-import com.mycompany.pojo.Kullanici;
-import com.mycompany.pojo.Not;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import com.kozdemirhasan.encryptednotes.database.UserDatabase;
+import com.kozdemirhasan.encryptednotes.R;
+import com.kozdemirhasan.encryptednotes.pojo.Kullanici;
 
 public class AyarlarActivity extends AppCompatActivity {
     Switch switchEskiNotlarSil;

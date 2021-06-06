@@ -1,4 +1,4 @@
-package com.mycompany.database;
+package com.kozdemirhasan.encryptednotes.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,19 +7,20 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.mycompany.pojo.Sabitler;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 
-public class NotesDBHelper extends SQLiteOpenHelper {
+public class UserDBHelper extends SQLiteOpenHelper {
 
-    private static final String CREATE_TABLE_NOTLAR = "create table " + Sabitler.TABLO_NOTLAR
-            + " (" + Sabitler.KEY_NOT_ID + " integer primary key autoincrement, "
-            + Sabitler.ROW_NOT_BASLIK + " text  not null, "
-            + Sabitler.ROW_NOT_ICERIK + " text  not null, "
-            + Sabitler.ROW_NOT_GRUP + " text not null, "
-            + Sabitler.ROW_NOT_TARIH + " longtext  not null);";
+    private static final String CREATE_TABLE_USER = "create table " + Sabitler.TABLO_KULLANICI
+            + " (" + Sabitler.KEY_USER_ID + " integer primary key autoincrement, "
+            + Sabitler.ROW_USER_PASSWORD + " text not null, "
+            + Sabitler.ROW_USER_FAKEPASSWORD + " text not null,"
+            + Sabitler.ROW_USER_GUN_DURUM + " integer not null,"
+            + Sabitler.ROW_USER_GUN + " integer not null,"
+            + Sabitler.ROW_USER_TEXTSIZE+ " integer not null);";
 
-    public NotesDBHelper(Context context, String name, CursorFactory factory, int version) {
+    public UserDBHelper(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
@@ -28,7 +29,7 @@ public class NotesDBHelper extends SQLiteOpenHelper {
         Log.v("NotesDBHelper..", "Tablolar oluşturuyor…");
         try {
 // db.execSQL(“drop table if exists”+Sabitler.TABLO);
-            db.execSQL(CREATE_TABLE_NOTLAR);
+            db.execSQL(CREATE_TABLE_USER);
 
         } catch (SQLiteException ex) {
             Log.v("Tablo olusturma hatasi ", ex.getMessage());
@@ -43,7 +44,7 @@ public class NotesDBHelper extends SQLiteOpenHelper {
 * Yenisi geldiğinde eski tablodaki tüm veriler silinecek ve
 * tablo yeniden oluşturulacak.
 */
-        db.execSQL("drop table if exists " + Sabitler.TABLO_NOTLAR);
+        db.execSQL("drop table if exists " + Sabitler.TABLO_KULLANICI);
         onCreate(db);
     }
 }

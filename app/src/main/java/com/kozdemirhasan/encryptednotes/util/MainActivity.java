@@ -1,9 +1,6 @@
-package com.mycompany.util;
+package com.kozdemirhasan.encryptednotes.util;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,17 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.mycompany.database.NotesDatabase;
-import com.mycompany.database.UserDatabase;
-import com.mycompany.mynotes.R;
-import com.mycompany.pojo.Crypt;
-import com.mycompany.pojo.Kullanici;
-import com.mycompany.pojo.MD5;
-import com.mycompany.pojo.Not;
-import com.mycompany.pojo.Sabitler;
+import com.kozdemirhasan.encryptednotes.database.NotesDatabase;
+import com.kozdemirhasan.encryptednotes.database.UserDatabase;
+import com.kozdemirhasan.encryptednotes.R;
+import com.kozdemirhasan.encryptednotes.pojo.Crypt;
+import com.kozdemirhasan.encryptednotes.pojo.Kullanici;
+import com.kozdemirhasan.encryptednotes.pojo.MD5;
+import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 

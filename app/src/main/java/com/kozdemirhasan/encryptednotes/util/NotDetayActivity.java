@@ -1,4 +1,4 @@
-package com.mycompany.util;
+package com.kozdemirhasan.encryptednotes.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,9 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Vibrator;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,15 +22,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mycompany.database.NotesDatabase;
-import com.mycompany.database.UserDatabase;
-import com.mycompany.mynotes.R;
-import com.mycompany.pojo.Crypt;
-import com.mycompany.pojo.Not;
-import com.mycompany.pojo.Sabitler;
-import com.mycompany.pojo.SimpleFileDialog;
-
-import java.io.File;
+import com.kozdemirhasan.encryptednotes.database.NotesDatabase;
+import com.kozdemirhasan.encryptednotes.database.UserDatabase;
+import com.kozdemirhasan.encryptednotes.R;
+import com.kozdemirhasan.encryptednotes.pojo.Crypt;
+import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 public class NotDetayActivity extends Activity {
     TextView baslik;

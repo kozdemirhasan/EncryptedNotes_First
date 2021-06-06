@@ -1,4 +1,4 @@
-package com.mycompany.pojo;
+package com.kozdemirhasan.encryptednotes.pojo;
 
 /**
  * Created by Casper on 17.02.2018.

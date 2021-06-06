@@ -1,11 +1,7 @@
-package com.mycompany.pojo;
+package com.kozdemirhasan.encryptednotes.pojo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-
-import com.mycompany.util.MainActivity;
-import com.mycompany.util.NotlarActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;

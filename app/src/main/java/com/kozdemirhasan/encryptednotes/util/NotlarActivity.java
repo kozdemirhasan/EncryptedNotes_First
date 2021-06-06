@@ -1,7 +1,6 @@
-package com.mycompany.util;
+package com.kozdemirhasan.encryptednotes.util;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -13,17 +12,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 
-import android.os.MemoryFile;
 import android.os.Vibrator;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
-import android.support.test.espresso.remote.EspressoRemoteMessage;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -40,25 +35,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.mycompany.custom.ExpListAdapter;
-import com.mycompany.database.NotesDatabase;
-import com.mycompany.database.UserDatabase;
-import com.mycompany.mynotes.R;
+import com.kozdemirhasan.encryptednotes.custom.ExpListAdapter;
+import com.kozdemirhasan.encryptednotes.database.NotesDatabase;
+import com.kozdemirhasan.encryptednotes.database.UserDatabase;
+import com.kozdemirhasan.encryptednotes.R;
 
-import com.mycompany.pojo.Crypt;
-import com.mycompany.pojo.MD5;
-import com.mycompany.pojo.Not;
-import com.mycompany.pojo.Sabitler;
-import com.mycompany.pojo.SimpleFileDialog;
+import com.kozdemirhasan.encryptednotes.pojo.Crypt;
+import com.kozdemirhasan.encryptednotes.pojo.MD5;
+import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
+import com.kozdemirhasan.encryptednotes.pojo.SimpleFileDialog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,15 +62,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.mycompany.pojo.Sabitler.lastPosition;
+import static com.kozdemirhasan.encryptednotes.pojo.Sabitler.lastPosition;
 
 
 public class NotlarActivity extends AppCompatActivity {
@@ -391,7 +381,6 @@ public class NotlarActivity extends AppCompatActivity {
     public void backUpData() {
         File sd = Environment.getExternalStorageDirectory();
 
-
         if (sd.canWrite()) {
             /////////////////////////////////////////////////////////////////////////////////////////////////
             //Create FileSaveDialog and register a callback
@@ -409,8 +398,14 @@ public class NotlarActivity extends AppCompatActivity {
                     });
 
             //You can change the default filename using the public variable "Default_File_Name"
-            FileSaveDialog.Default_File_Name = "MyNotes_" + tahihBilgisiniGetir();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
+           String  tarih = dateFormat.format(System.currentTimeMillis());
+
+            FileSaveDialog.Default_File_Name = "MyNotes_" + tarih;
+         //   FileSaveDialog.Default_File_Name = "MyNotes_" + tahihBilgisiniGetir();
             FileSaveDialog.chooseFile_or_Dir();
+
         } else {
             Toast.makeText(NotlarActivity.this,
                     "Before you can make a backup, you must first grant access to the storage in My Notes", Toast.LENGTH_LONG).show();
@@ -558,6 +553,7 @@ public class NotlarActivity extends AppCompatActivity {
         int minute = mcurrentTime.get(Calendar.MINUTE);//Güncel dakikayı aldık
         int sekond = mcurrentTime.get(Calendar.SECOND);//Güncel saniyeyi aldık
 
+        // return "" + day + month + year + hour + minute + sekond;
         return "" + day + month + year + hour + minute + sekond;
 
     }
@@ -602,7 +598,7 @@ public class NotlarActivity extends AppCompatActivity {
         final String finalKonu = konu;
         builder.setMessage(finalKonu + "\n ... are you sure you want to delete the note on?")
                 .setCancelable(true)
-                .setPositiveButton("Evet",
+                .setPositiveButton("Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

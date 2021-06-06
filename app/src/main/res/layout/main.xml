@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/logo_notdefteri"
 
-    tools:context="com.mycompany.util.MainActivity">
+    tools:context=".util.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

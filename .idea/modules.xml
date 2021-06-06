@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MyNotes.iml" filepath="$PROJECT_DIR$/.idea/modules/MyNotes.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MyNotes.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MyNotes.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/EncryptedNotes.iml" filepath="$PROJECT_DIR$/.idea/modules/EncryptedNotes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/EncryptedNotes.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/EncryptedNotes.app.iml" />
     </modules>
   </component>
 </project>

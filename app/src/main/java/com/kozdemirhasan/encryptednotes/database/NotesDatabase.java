@@ -1,4 +1,4 @@
-package com.mycompany.database;
+package com.kozdemirhasan.encryptednotes.database;
 
 
 import android.content.ContentValues;
@@ -9,16 +9,14 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 
-import com.mycompany.pojo.Crypt;
-import com.mycompany.pojo.Not;
-import com.mycompany.pojo.Sabitler;
-import com.mycompany.util.MainActivity;
+import com.kozdemirhasan.encryptednotes.pojo.Crypt;
+import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -80,7 +78,6 @@ public class NotesDatabase {
                     new String[]{grupAdi},
                     null, null, Sabitler.ROW_NOT_TARIH + " desc");
 
-            //   c = db.query(Sabitler.TABLO_NOTLAR, null, null, null, null, null,null);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -144,7 +141,7 @@ public class NotesDatabase {
         }
         Collections.sort(gruplarYeni);//çözümlediğimiz grup adlarını a-z sıralıyoruz
 
-        ArrayList<String> gruplarSon = new ArrayList<String>();
+        ArrayList<String> gruplarSon = new ArrayList<>();
         for(String grp:gruplarYeni){
             gruplarSon.add( crypt.encrypt(grp,Sabitler.loginPassword));//a-z sıralanmış grup adları tekrar kriptolanıp yeni gruba atıyoruz
         }

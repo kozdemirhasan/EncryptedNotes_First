@@ -1,4 +1,4 @@
-package com.mycompany.util;
+package com.kozdemirhasan.encryptednotes.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,12 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.mycompany.database.NotesDatabase;
-import com.mycompany.database.UserDatabase;
-import com.mycompany.mynotes.R;
-import com.mycompany.pojo.Crypt;
-import com.mycompany.pojo.MD5;
-import com.mycompany.pojo.Sabitler;
+import com.kozdemirhasan.encryptednotes.database.UserDatabase;
+import com.kozdemirhasan.encryptednotes.R;
+import com.kozdemirhasan.encryptednotes.pojo.Crypt;
+import com.kozdemirhasan.encryptednotes.pojo.MD5;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 public class KullaniciKayitActivity extends AppCompatActivity {
 

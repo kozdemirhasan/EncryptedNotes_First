@@ -1,4 +1,4 @@
-package com.mycompany.mynotes;
+package com.kozdemirhasan.mynotes;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

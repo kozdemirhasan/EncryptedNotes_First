@@ -1,4 +1,4 @@
-package com.mycompany.mynotes;
+package com.kozdemirhasan.mynotes;
 
 import org.junit.Test;
 

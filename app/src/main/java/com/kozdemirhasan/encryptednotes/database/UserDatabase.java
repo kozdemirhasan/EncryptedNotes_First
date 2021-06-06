@@ -1,4 +1,4 @@
-package com.mycompany.database;
+package com.kozdemirhasan.encryptednotes.database;
 
 
 import android.content.ContentValues;
@@ -7,17 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.mycompany.pojo.Crypt;
-import com.mycompany.pojo.Kullanici;
-import com.mycompany.pojo.MD5;
-import com.mycompany.pojo.Not;
-import com.mycompany.pojo.Sabitler;
-import com.mycompany.util.NotlarActivity;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.kozdemirhasan.encryptednotes.pojo.Crypt;
+import com.kozdemirhasan.encryptednotes.pojo.Kullanici;
+import com.kozdemirhasan.encryptednotes.pojo.MD5;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 import static android.widget.Toast.makeText;
 

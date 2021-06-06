@@ -1,4 +1,4 @@
-package com.mycompany.pojo;
+package com.kozdemirhasan.encryptednotes.pojo;
 
 import android.os.Parcelable;
 

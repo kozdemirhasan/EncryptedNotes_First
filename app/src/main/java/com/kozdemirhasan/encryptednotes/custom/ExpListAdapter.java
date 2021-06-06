@@ -1,7 +1,6 @@
-package com.mycompany.custom;
+package com.kozdemirhasan.encryptednotes.custom;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +8,10 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.mycompany.mynotes.R;
-import com.mycompany.pojo.Crypt;
-import com.mycompany.pojo.Not;
-import com.mycompany.pojo.Sabitler;
-import com.mycompany.util.MainActivity;
+import com.kozdemirhasan.encryptednotes.R;
+import com.kozdemirhasan.encryptednotes.pojo.Crypt;
+import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
