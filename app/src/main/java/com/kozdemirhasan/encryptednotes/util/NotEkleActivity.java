@@ -64,11 +64,11 @@ public class NotEkleActivity extends Activity {
                     dba.ac();
 
                     /*
-                     * Not ekleme alanları boş ise uyarı ver değilse notu ekle*/
+                     * Note ekleme alanları boş ise uyarı ver değilse notu ekle*/
 
                     if (konuET.getText().length() != 0 && icerikET.getText().length() != 0) {
 
-                        new IslemTask().execute(); //multi thread işlem başladı... not kayıt ediliyor
+                        new IslemTask().execute(); //multi thread işlem başladı... note kayıt ediliyor
 
                     } else {
                         int duration = Toast.LENGTH_SHORT;
@@ -115,14 +115,14 @@ public class NotEkleActivity extends Activity {
             }
 
         }
-        popupMenu.getMenu().add("(+)ADD NEW GROUP");
+        popupMenu.getMenu().add("(+) NEW GROUP");
         popupMenu.show();
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 secilenGrup = item.getTitle().toString().trim();
-                if (secilenGrup.toString().equals("(+)ADD NEW GROUP")) {
+                if (secilenGrup.toString().equals("(+) NEW GROUP")) {
                     //yeni grup ekleme ekranı gelsin
 
                     yeniGrupAl();
@@ -236,7 +236,7 @@ public class NotEkleActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void result) {
-            //not kaydedildikten sonra konu ve içerik alanını temizle
+            //note kaydedildikten sonra konu ve içerik alanını temizle
             //ve Notlar sayfasına git
 
             konuET.setText("");

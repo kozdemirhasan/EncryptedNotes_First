@@ -10,7 +10,7 @@ import android.util.Log;
 
 
 import com.kozdemirhasan.encryptednotes.pojo.Crypt;
-import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Note;
 import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 import java.text.DateFormat;
@@ -32,7 +32,7 @@ public class NotesDatabase {
     //constructer
     public NotesDatabase(Context c) {
         context = c;
-//Dphelper opjesiyle yeni veritabanı oluşturuluyor.
+        //Dphelper opjesiyle yeni veritabanı oluşturuluyor.
         dbhelper = new NotesDBHelper(context, Sabitler.DATABASE_NAME_NOTES, null,
                 Sabitler.DATABASE_VERSION_NOTES);
 
@@ -62,21 +62,20 @@ public class NotesDatabase {
 
 
     public void tumNotlariSil() {
-        db.delete(Sabitler.TABLO_NOTLAR, null, null);
+        db.delete(Sabitler.TABLO_NOTES_NAME, null, null);
     }
 
 
     //grubun tüm notları al getir
-    public ArrayList<Not> grubunNotlariniGetir(String grupAdi) {
-        ArrayList<Not> notlar = new ArrayList<Not>();
+    public ArrayList<Note> grubunNotlariniGetir(String grupAdi) {
+        ArrayList<Note> notlar = new ArrayList<Note>();
         Cursor c;
         try {
-            // new String[]{Sabitler.KEY_NOT_ID, Sabitler.ROW_NOT_BASLIK, Sabitler.ROW_NOT_TARIH, Sabitler.ROW_NOT_GRUP}
-            c = db.query(Sabitler.TABLO_NOTLAR, new String[]{Sabitler.KEY_NOT_ID, Sabitler.ROW_NOT_BASLIK,
-                            Sabitler.ROW_NOT_TARIH, Sabitler.ROW_NOT_GRUP},
-                    Sabitler.ROW_NOT_GRUP + "=? ",
+            c = db.query(Sabitler.TABLO_NOTES_NAME, new String[]{Sabitler.KEY_NOT_ID, Sabitler.ROW_NOTE_TITLE,
+                            Sabitler.ROW_NOTE_DATE, Sabitler.ROW_NOTE_GROUP},
+                    Sabitler.ROW_NOTE_GROUP + "=? ",
                     new String[]{grupAdi},
-                    null, null, Sabitler.ROW_NOT_TARIH + " desc");
+                    null, null, Sabitler.ROW_NOTE_DATE + " desc");
 
 
         } catch (Exception ex) {
@@ -88,12 +87,12 @@ public class NotesDatabase {
         if (c != null) {
             while (c.moveToNext()) {
                 int id = c.getInt(c.getColumnIndex(Sabitler.KEY_NOT_ID));
-                String baslik = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_BASLIK));
-                String grup = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_GRUP));
+                String baslik = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_TITLE));
+                String grup = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_GROUP));
                 //  String icerik = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_ICERIK));
 
                 DateFormat dateFormat = DateFormat.getDateTimeInstance();
-                long trhfark = new Date().getTime() - c.getLong(c.getColumnIndex(Sabitler.ROW_NOT_TARIH));
+                long trhfark = new Date().getTime() - c.getLong(c.getColumnIndex(Sabitler.ROW_NOTE_DATE));
                 String tarih = null;
                 long birgun = 24 * 60 * 60 * 1000;
                 if (trhfark <= 0) {
@@ -103,18 +102,18 @@ public class NotesDatabase {
                 if (trhfark < birgun) {
                     SimpleDateFormat bicimAyniGun = new SimpleDateFormat("HH:mm");
                     tarih = bicimAyniGun.format(new Date(c.getLong(c
-                            .getColumnIndex(Sabitler.ROW_NOT_TARIH))).getTime());
+                            .getColumnIndex(Sabitler.ROW_NOTE_DATE))).getTime());
                 } else {
                     SimpleDateFormat bicim = new SimpleDateFormat("dd MMM yy");
                     tarih = bicim.format(new Date(c.getLong(c
-                            .getColumnIndex(Sabitler.ROW_NOT_TARIH))).getTime());
+                            .getColumnIndex(Sabitler.ROW_NOTE_DATE))).getTime());
                 }
-                Not not = new Not();
-                not.set_id(id);
-                not.setKonu(baslik);
-                not.setGrup(grup);
-                not.setKayittarihi(tarih);
-                notlar.add(not);
+                Note note = new Note();
+                note.set_id(id);
+                note.setKonu(baslik);
+                note.setGrup(grup);
+                note.setKayittarihi(tarih);
+                notlar.add(note);
             }
         }
         return notlar;
@@ -129,21 +128,21 @@ public class NotesDatabase {
 //Curson tipinde gelen notları teker teker dolaşıyoruz
         if (c != null) {
             while (c.moveToNext()) {
-                String grup = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_GRUP));
+                String grup = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_GROUP));
                 gruplar.add(grup);//kriptolu halde grup adları
             }
         }
 
         Crypt crypt = new Crypt();
         ArrayList<String> gruplarYeni = new ArrayList<String>();
-        for(String grp:gruplar){
-            gruplarYeni.add( crypt.decrypt(grp,Sabitler.loginPassword));//kriptolu grup adlarını çözümlüyoruz
+        for (String grp : gruplar) {
+            gruplarYeni.add(crypt.decrypt(grp, Sabitler.loginPassword));//kriptolu grup adlarını çözümlüyoruz
         }
         Collections.sort(gruplarYeni);//çözümlediğimiz grup adlarını a-z sıralıyoruz
 
         ArrayList<String> gruplarSon = new ArrayList<>();
-        for(String grp:gruplarYeni){
-            gruplarSon.add( crypt.encrypt(grp,Sabitler.loginPassword));//a-z sıralanmış grup adları tekrar kriptolanıp yeni gruba atıyoruz
+        for (String grp : gruplarYeni) {
+            gruplarSon.add(crypt.encrypt(grp, Sabitler.loginPassword));//a-z sıralanmış grup adları tekrar kriptolanıp yeni gruba atıyoruz
         }
 
 
@@ -153,8 +152,8 @@ public class NotesDatabase {
     public Cursor tumGruplariAlGetir() {
         try {
             //Sabitler.ROW_USER_ID + " = ? ", new String[]{String.valueOf(idKullanici)}
-            Cursor c = db.query(true, Sabitler.TABLO_NOTLAR,
-                    new String[]{Sabitler.ROW_NOT_GRUP},
+            Cursor c = db.query(true, Sabitler.TABLO_NOTES_NAME,
+                    new String[]{Sabitler.ROW_NOTE_GROUP},
                     null, null, null, null
                     , null, null);
             return c;
@@ -165,8 +164,8 @@ public class NotesDatabase {
     }
 
     //başlangıçta tüm notların id ve tarihlerini al getir
-    public List<Not> tumKayitlar() {
-        List<Not> notlar = new ArrayList<Not>();
+    public List<Note> tumKayitlar() {
+        List<Note> notlar = new ArrayList<Note>();
         Cursor c = tumNotlar();
 
 //Curson tipinde gelen notları teker teker dolaşıyoruz
@@ -174,8 +173,8 @@ public class NotesDatabase {
             while (c.moveToNext()) {
                 int id = c.getInt(c.getColumnIndex(Sabitler.KEY_NOT_ID));
 
-                long tarihLong = c.getLong(c.getColumnIndex(Sabitler.ROW_NOT_TARIH));
-                Not gecici = new Not(id, tarihLong);
+                long tarihLong = c.getLong(c.getColumnIndex(Sabitler.ROW_NOTE_DATE));
+                Note gecici = new Note(id, tarihLong);
 //Veritabanındaki tüm notları birer birer ArrayList’e kaydediyoruz.
                 notlar.add(gecici);
             }
@@ -189,7 +188,7 @@ public class NotesDatabase {
     public Cursor tumNotlar() {
         try {
             //Sabitler.ROW_USER_ID + " = ? ", new String[]{String.valueOf(idKullanici)}
-            Cursor c = db.query(Sabitler.TABLO_NOTLAR, null, null, null, null, null
+            Cursor c = db.query(Sabitler.TABLO_NOTES_NAME, null, null, null, null, null
                     , null, null);
             return c;
         } catch (Exception ex) {
@@ -210,11 +209,11 @@ public class NotesDatabase {
         try {
             ContentValues yeniDegerler = new ContentValues();
             Crypt crypt = new Crypt();
-            yeniDegerler.put(Sabitler.ROW_NOT_BASLIK, crypt.encrypt(konu, Sabitler.loginPassword));
-            yeniDegerler.put(Sabitler.ROW_NOT_ICERIK, crypt.encrypt(icerik, Sabitler.loginPassword));
-            yeniDegerler.put(Sabitler.ROW_NOT_GRUP, crypt.encrypt(grup, Sabitler.loginPassword));
-            yeniDegerler.put(Sabitler.ROW_NOT_TARIH, System.currentTimeMillis());
-            return db.insert(Sabitler.TABLO_NOTLAR, null, yeniDegerler);
+            yeniDegerler.put(Sabitler.ROW_NOTE_TITLE, crypt.encrypt(konu, Sabitler.loginPassword));
+            yeniDegerler.put(Sabitler.ROW_NOTE_BODY, crypt.encrypt(icerik, Sabitler.loginPassword));
+            yeniDegerler.put(Sabitler.ROW_NOTE_GROUP, crypt.encrypt(grup, Sabitler.loginPassword));
+            yeniDegerler.put(Sabitler.ROW_NOTE_DATE, System.currentTimeMillis());
+            return db.insert(Sabitler.TABLO_NOTES_NAME, null, yeniDegerler);
 
         } catch (SQLiteException ex) {
 
@@ -230,20 +229,20 @@ public class NotesDatabase {
         ContentValues guncelDegerler = new ContentValues();
         String[] idArray = {String.valueOf(id)};
 
-        guncelDegerler.put(Sabitler.ROW_NOT_BASLIK, konu);
-        guncelDegerler.put(Sabitler.ROW_NOT_ICERIK, icerik);
-        guncelDegerler.put(Sabitler.ROW_NOT_GRUP, grup);
-        guncelDegerler.put(Sabitler.ROW_NOT_TARIH, System.currentTimeMillis());
-        db.update(Sabitler.TABLO_NOTLAR, guncelDegerler, Sabitler.KEY_NOT_ID + " =? ", idArray);
+        guncelDegerler.put(Sabitler.ROW_NOTE_TITLE, konu);
+        guncelDegerler.put(Sabitler.ROW_NOTE_BODY, icerik);
+        guncelDegerler.put(Sabitler.ROW_NOTE_GROUP, grup);
+        guncelDegerler.put(Sabitler.ROW_NOTE_DATE, System.currentTimeMillis());
+        db.update(Sabitler.TABLO_NOTES_NAME, guncelDegerler, Sabitler.KEY_NOT_ID + " =? ", idArray);
 
 
     }
 
     public int tumTarihGuncelle(long tarih) {
         ContentValues guncelDegerler = new ContentValues();
-        guncelDegerler.put(Sabitler.ROW_NOT_TARIH, tarih);
+        guncelDegerler.put(Sabitler.ROW_NOTE_DATE, tarih);
         try {
-            db.update(Sabitler.TABLO_NOTLAR, guncelDegerler, null, null);
+            db.update(Sabitler.TABLO_NOTES_NAME, guncelDegerler, null, null);
             return 1;
         } catch (Exception ex) {
             return -1;
@@ -252,24 +251,24 @@ public class NotesDatabase {
     }
 
     public void idIleNotSil(int id) {
-        db.delete(Sabitler.TABLO_NOTLAR, Sabitler.KEY_NOT_ID + " =" + id, null);
+        db.delete(Sabitler.TABLO_NOTES_NAME, Sabitler.KEY_NOT_ID + " =" + id, null);
     }
 
     public void eskileriSil(List<Integer> idler) {
         for (int i = 0; i < idler.size(); i++) {
             String[] idArray = {String.valueOf(idler.get(i))};
-            db.delete(Sabitler.TABLO_NOTLAR, Sabitler.KEY_NOT_ID + " = ?", idArray);
+            db.delete(Sabitler.TABLO_NOTES_NAME, Sabitler.KEY_NOT_ID + " = ?", idArray);
         }
     }
 
 
     //id ile not getir
-    public Not notGetir(String id) {
+    public Note notGetir(String id) {
 
         Cursor c;
         try {
             //Sabitler.ROW_USER_ID + " = ? ", new String[]{String.valueOf(idKullanici)}
-            c = db.query(Sabitler.TABLO_NOTLAR, null, Sabitler.KEY_NOT_ID + " = ? ",
+            c = db.query(Sabitler.TABLO_NOTES_NAME, null, Sabitler.KEY_NOT_ID + " = ? ",
                     new String[]{id}, null
                     , null, null);
 
@@ -282,25 +281,25 @@ public class NotesDatabase {
 
         if (c.moveToNext()) {
             int idx = c.getInt(c.getColumnIndex(Sabitler.KEY_NOT_ID));
-            String baslik = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_BASLIK));
-            String icerik = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_ICERIK));
-            String grup = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_GRUP));
+            String baslik = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_TITLE));
+            String icerik = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_BODY));
+            String grup = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_GROUP));
             DateFormat dateFormat = DateFormat.getDateTimeInstance();
-            long trhfark = new Date().getTime() - c.getLong(c.getColumnIndex(Sabitler.ROW_NOT_TARIH));
+            long trhfark = new Date().getTime() - c.getLong(c.getColumnIndex(Sabitler.ROW_NOTE_DATE));
             String tarih;
             if (trhfark < 24 * 60 * 60 * 1000) {
                 SimpleDateFormat bicimAyniGun = new SimpleDateFormat("HH:mm:ss");
                 tarih = bicimAyniGun.format(new Date(c.getLong(c
-                        .getColumnIndex(Sabitler.ROW_NOT_TARIH))).getTime());
+                        .getColumnIndex(Sabitler.ROW_NOTE_DATE))).getTime());
             } else {
                 SimpleDateFormat bicim = new SimpleDateFormat("dd-MM-yyyy");
                 tarih = bicim.format(new Date(c.getLong(c
-                        .getColumnIndex(Sabitler.ROW_NOT_TARIH))).getTime());
+                        .getColumnIndex(Sabitler.ROW_NOTE_DATE))).getTime());
             }
 
-            Not not = new Not(idx, baslik, icerik, tarih, grup);
+            Note note = new Note(idx, baslik, icerik, tarih, grup);
 
-            return not;
+            return note;
 
         } else {
             makeText(null, "An error occurred", LENGTH_SHORT).show();
@@ -312,20 +311,20 @@ public class NotesDatabase {
 
 
     //parola değiştiriken tüm notların şifrelemesinin değişmesi için tüm notları al getir
-    public List<Not> butunNotlar() {
-        List<Not> notlar = new ArrayList<Not>();
+    public List<Note> butunNotlar() {
+        List<Note> notlar = new ArrayList<Note>();
         Cursor c = tumNotlar2();
 
 //Curson tipinde gelen notları teker teker dolaşıyoruz
         if (c != null) {
             while (c.moveToNext()) {
                 int id = c.getInt(c.getColumnIndex(Sabitler.KEY_NOT_ID));
-                String grup = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_GRUP));
-                String baslik = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_BASLIK));
-                String icerik = c.getString(c.getColumnIndex(Sabitler.ROW_NOT_ICERIK));
-                long tarihLong = c.getLong(c.getColumnIndex(Sabitler.ROW_NOT_TARIH));
+                String grup = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_GROUP));
+                String baslik = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_TITLE));
+                String icerik = c.getString(c.getColumnIndex(Sabitler.ROW_NOTE_BODY));
+                long tarihLong = c.getLong(c.getColumnIndex(Sabitler.ROW_NOTE_DATE));
 
-                Not gecici = new Not(id, grup, baslik, icerik, tarihLong);
+                Note gecici = new Note(id, grup, baslik, icerik, tarihLong);
 
 //Veritabanındaki tüm notları birer birer ArrayList’e kaydediyoruz.
                 notlar.add(gecici);
@@ -339,7 +338,7 @@ public class NotesDatabase {
     public Cursor tumNotlar2() {
         try {
             //Sabitler.ROW_USER_ID + " = ? ", new String[]{String.valueOf(idKullanici)}
-            Cursor c = db.query(Sabitler.TABLO_NOTLAR, null, null, null, null, null
+            Cursor c = db.query(Sabitler.TABLO_NOTES_NAME, null, null, null, null, null
                     , null, null);
             return c;
         } catch (Exception ex) {
@@ -348,15 +347,15 @@ public class NotesDatabase {
         }
     }
 
-    public void notlariYenidenYaz(Not not) {
+    public void notlariYenidenYaz(Note note) {
         ContentValues yeniDegerler = new ContentValues();
 
-        String[] idArray = {String.valueOf(not.get_id())};
-        yeniDegerler.put(Sabitler.ROW_NOT_GRUP, not.getGrup());
-        yeniDegerler.put(Sabitler.ROW_NOT_BASLIK, not.getKonu());
-        yeniDegerler.put(Sabitler.ROW_NOT_ICERIK, not.getIcerik());
-        yeniDegerler.put(Sabitler.ROW_NOT_TARIH, not.getTrh());
-        db.update(Sabitler.TABLO_NOTLAR, yeniDegerler, Sabitler.KEY_NOT_ID + " =?", idArray);
+        String[] idArray = {String.valueOf(note.get_id())};
+        yeniDegerler.put(Sabitler.ROW_NOTE_GROUP, note.getGrup());
+        yeniDegerler.put(Sabitler.ROW_NOTE_TITLE, note.getKonu());
+        yeniDegerler.put(Sabitler.ROW_NOTE_BODY, note.getIcerik());
+        yeniDegerler.put(Sabitler.ROW_NOTE_DATE, note.getTrh());
+        db.update(Sabitler.TABLO_NOTES_NAME, yeniDegerler, Sabitler.KEY_NOT_ID + " =?", idArray);
     }
 
 }

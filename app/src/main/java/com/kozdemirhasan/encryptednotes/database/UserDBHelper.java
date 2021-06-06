@@ -15,7 +15,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_USER = "create table " + Sabitler.TABLO_KULLANICI
             + " (" + Sabitler.KEY_USER_ID + " integer primary key autoincrement, "
             + Sabitler.ROW_USER_PASSWORD + " text not null, "
-            + Sabitler.ROW_USER_FAKEPASSWORD + " text not null,"
             + Sabitler.ROW_USER_GUN_DURUM + " integer not null,"
             + Sabitler.ROW_USER_GUN + " integer not null,"
             + Sabitler.ROW_USER_TEXTSIZE+ " integer not null);";

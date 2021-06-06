@@ -14,12 +14,12 @@ import android.widget.Toast;
 
 import com.kozdemirhasan.encryptednotes.database.UserDatabase;
 import com.kozdemirhasan.encryptednotes.R;
-import com.kozdemirhasan.encryptednotes.pojo.Kullanici;
+import com.kozdemirhasan.encryptednotes.pojo.User;
 
 public class AyarlarActivity extends AppCompatActivity {
     Switch switchEskiNotlarSil;
     String eskiTarihText = "Delete old notes";
-    private static Kullanici ayarx;
+    private static User ayarx;
 
 
     @Override

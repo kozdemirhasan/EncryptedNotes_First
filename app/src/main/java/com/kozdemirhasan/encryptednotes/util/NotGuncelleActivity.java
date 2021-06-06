@@ -32,11 +32,11 @@ import java.util.ArrayList;
 public class NotGuncelleActivity extends Activity {
 
     private EditText konuET, icerikET;
-    private Button guncelleBTN, btnGrupSec;
+    private Button guncelleBTN;
     TextView twGruplar;
     private NotesDatabase dba;
     private int id;
-    String secilenGrup = "DEFAULT";
+    String secilenGrup = "DEFAULT GROUP";
     private String m_Text = "";
 
     @Override
@@ -47,14 +47,13 @@ public class NotGuncelleActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.notekleguncelle);
 
-//listele sayfasından gelen ID güncellenecek not id’sini temsil ediyor.
+//listele sayfasından gelen ID güncellenecek note id’sini temsil ediyor.
 
         id = Integer.parseInt(getIntent().getExtras().get("ID").toString());
 
         konuET = (EditText) findViewById(R.id.konuText);
         icerikET = (EditText) findViewById(R.id.icerikText);
 
-     //   btnGrupSec = (Button) findViewById(R.id.btnGrupSec);
         twGruplar = (TextView) findViewById(R.id.twGruplar);
 
 
@@ -70,14 +69,6 @@ public class NotGuncelleActivity extends Activity {
         icerikET.setTextSize(Sabitler.yaziBoyutu);
 
 
-    /*    btnGrupSec.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                vib.vibrate(30);
-                grupSec(v, grupElemanlari());
-            }
-        });*/
 
         twGruplar.setOnClickListener(new OnClickListener() {
             @Override
@@ -95,7 +86,7 @@ public class NotGuncelleActivity extends Activity {
                     Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     vib.vibrate(40);
                     if (konuET.getText().length() != 0 && icerikET.getText().length() != 0) {
-                        new IslemTask().execute(); //multi thread işlem başladı... not güncelleniyor
+                        new IslemTask().execute(); //multi thread işlem başladı... note güncelleniyor
                     } else {
                         Toast.makeText(NotGuncelleActivity.this,
                                 "'title' and 'body' no empty", Toast.LENGTH_SHORT).show();
@@ -254,7 +245,7 @@ public class NotGuncelleActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void result) {
-            //not güncellendikten sonra konu ve içerik alanını temizle
+            //note güncellendikten sonra konu ve içerik alanını temizle
             //ve Notlar sayfasına git
 
             konuET.setText("");

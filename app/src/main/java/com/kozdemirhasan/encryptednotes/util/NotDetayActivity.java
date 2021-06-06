@@ -26,14 +26,14 @@ import com.kozdemirhasan.encryptednotes.database.NotesDatabase;
 import com.kozdemirhasan.encryptednotes.database.UserDatabase;
 import com.kozdemirhasan.encryptednotes.R;
 import com.kozdemirhasan.encryptednotes.pojo.Crypt;
-import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Note;
 import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 public class NotDetayActivity extends Activity {
     TextView baslik;
     TextView icerik;
     TextView tarih;
-    Not not;
+    Note note;
     Button btnSil;
     Button btnDuzenle;
     Button btnNotlaraDon;
@@ -79,7 +79,7 @@ public class NotDetayActivity extends Activity {
             public void onClick(View v) {
                 Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 vib.vibrate(40);
-                notSil(not.get_id());
+                notSil(note.get_id());
             }
         });
 
@@ -131,7 +131,7 @@ public class NotDetayActivity extends Activity {
             String text = title+"\n"+body ;
 
             PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
-            //Check if package exists or not. If not then code
+            //Check if package exists or note. If note then code
             //in catch block will be called
             waIntent.setPackage("com.whatsapp");
 
@@ -139,7 +139,7 @@ public class NotDetayActivity extends Activity {
             startActivity(Intent.createChooser(waIntent, "Share with"));
 
         } catch (PackageManager.NameNotFoundException e) {
-            Toast.makeText(this, "WhatsApp not Installed", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "WhatsApp note Installed", Toast.LENGTH_SHORT)
                     .show();
         }
 
@@ -149,7 +149,7 @@ public class NotDetayActivity extends Activity {
         //Veritabanından notu al getir
         NotesDatabase dba = new NotesDatabase(NotDetayActivity.this);
         dba.ac();
-        not = dba.notGetir(getIntent().getExtras().get("ID").toString());
+        note = dba.notGetir(getIntent().getExtras().get("ID").toString());
         dba.kapat();
 
 
@@ -217,7 +217,7 @@ public class NotDetayActivity extends Activity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         NotDetayActivity.this);
-                builder.setTitle(not.konu.toString());
+                builder.setTitle(note.konu.toString());
                 builder.setItems(items,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
@@ -227,7 +227,7 @@ public class NotDetayActivity extends Activity {
                                         notGuncelle();
                                         break;
                                     case 1:
-                                        notSil(not.get_id());
+                                        notSil(note.get_id());
                                         break;
                                     default:
                                         break;
@@ -252,7 +252,7 @@ public class NotDetayActivity extends Activity {
         final Crypt crypt = new Crypt();
         String konu = null;
         try {
-            konu = crypt.decrypt(not.getKonu(), Sabitler.loginPassword);
+            konu = crypt.decrypt(note.getKonu(), Sabitler.loginPassword);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -260,7 +260,7 @@ public class NotDetayActivity extends Activity {
                 NotDetayActivity.this);
 
         final String finalKonu = konu;
-        builder.setMessage(finalKonu + "\n\n(Are you sure you want to delete the note on?)")
+        builder.setMessage(finalKonu + "\n\nAre you sure you want to delete the note on?")
                 .setCancelable(true)
                 .setPositiveButton("Yes",
                         new DialogInterface.OnClickListener() {
@@ -273,7 +273,7 @@ public class NotDetayActivity extends Activity {
                                 dba.kapat();
 
                                 int duration = Toast.LENGTH_SHORT;
-                                //Not silindikten sonra silindi olarak bildir.
+                                //Note silindikten sonra silindi olarak bildir.
                                 Toast toast = null;
                                 try {
                                     toast = Toast.makeText(getApplicationContext(),
@@ -309,7 +309,7 @@ public class NotDetayActivity extends Activity {
         //Veritabanından notu al getir
         NotesDatabase dba = new NotesDatabase(NotDetayActivity.this);
         dba.ac();
-        Not notGiden = dba.notGetir(String.valueOf(not.get_id()));//not değişkene atandı
+        Note notGiden = dba.notGetir(String.valueOf(note.get_id()));//note değişkene atandı
         dba.kapat();
 
         Crypt crypt = new Crypt();
@@ -365,19 +365,19 @@ public class NotDetayActivity extends Activity {
         protected void onPostExecute(Void result) {
             //ekrana bas
 
-            if (not != null) {
+            if (note != null) {
                 Crypt crypt = new Crypt();
                 try {
-                    title= crypt.decrypt(not.getKonu().toString(), Sabitler.loginPassword);
+                    title= crypt.decrypt(note.getKonu().toString(), Sabitler.loginPassword);
                     baslik.setText(title);
 
-                    body =crypt.decrypt(not.getIcerik().toString(), Sabitler.loginPassword);
+                    body =crypt.decrypt(note.getIcerik().toString(), Sabitler.loginPassword);
                     icerik.setText(body);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                tarih.setText(not.getKayittarihi().toString());
+                tarih.setText(note.getKayittarihi().toString());
 
                 icerik.setTextSize(Sabitler.yaziBoyutu);
                 tarih.setTextSize(Sabitler.yaziBoyutu - 4);

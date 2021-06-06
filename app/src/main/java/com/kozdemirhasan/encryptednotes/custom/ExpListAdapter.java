@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.kozdemirhasan.encryptednotes.R;
 import com.kozdemirhasan.encryptednotes.pojo.Crypt;
-import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Note;
 import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 import java.util.ArrayList;
@@ -20,10 +20,9 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private ArrayList<String> basliklar;
-    private HashMap<String, ArrayList<Not>> icerik;
-    //LayoutInflater inflater;
+    private HashMap<String, ArrayList<Note>> icerik;
 
-    public ExpListAdapter(Context context, ArrayList<String> basliklar, HashMap<String, ArrayList<Not>> icerik) {
+    public ExpListAdapter(Context context, ArrayList<String> basliklar, HashMap<String, ArrayList<Note>> icerik) {
         super();
         this.context = context;
         this.basliklar = basliklar;
@@ -33,20 +32,19 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        // TODO Auto-generated method stub
+
         return icerik.get(basliklar.get(groupPosition)).get(childPosition);
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        // TODO Auto-generated method stub
         return childPosition;
     }
 
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView,
                              ViewGroup parent) {
-        // TODO Auto-generated method stub
-        final Not not = (Not) getChild(groupPosition, childPosition);
+
+        final Note note = (Note) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -56,13 +54,13 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         TextView baslik = (TextView) convertView.findViewById(R.id.txtBaslik);
         Crypt crypt = new Crypt();
         try {
-            baslik.setText(crypt.decrypt(not.getKonu(), Sabitler.loginPassword));
+            baslik.setText(crypt.decrypt(note.getKonu(), Sabitler.loginPassword));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         TextView tarih = (TextView) convertView.findViewById(R.id.txtTarih);
-        tarih.setText(not.getKayittarihi());
+        tarih.setText(note.getKayittarihi());
 
         CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.chkSecim);
         checkBox.setChecked(false);
@@ -73,31 +71,27 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        // TODO Auto-generated method stub
         return icerik.get(basliklar.get(groupPosition)).size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        // TODO Auto-generated method stub
-        return basliklar.get(groupPosition);
+          return basliklar.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        // TODO Auto-generated method stub
-        return basliklar.size();
+          return basliklar.size();
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        // TODO Auto-generated method stub
-        return groupPosition;
+           return groupPosition;
     }
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
+
         String baslik = (String) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -117,13 +111,13 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean hasStableIds() {
-        // TODO Auto-generated method stub
+
         return false;
     }
 
     @Override
     public boolean isChildSelectable(int arg0, int arg1) {
-        // TODO Auto-generated method stub
+
         return true;
     }
 

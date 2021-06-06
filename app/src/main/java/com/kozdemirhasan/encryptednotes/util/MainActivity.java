@@ -14,9 +14,8 @@ import com.kozdemirhasan.encryptednotes.database.NotesDatabase;
 import com.kozdemirhasan.encryptednotes.database.UserDatabase;
 import com.kozdemirhasan.encryptednotes.R;
 import com.kozdemirhasan.encryptednotes.pojo.Crypt;
-import com.kozdemirhasan.encryptednotes.pojo.Kullanici;
-import com.kozdemirhasan.encryptednotes.pojo.MD5;
-import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.User;
+import com.kozdemirhasan.encryptednotes.pojo.Note;
 import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnGiris;
     EditText etParola;
     // HashMap<String, Integer> ayar;
-    Kullanici ayar;
+    User ayar;
 
 
     @Override
@@ -37,13 +36,16 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_SECURE);
 
         setContentView(R.layout.main);
+        setTitle("Encrypted Notes");
 
 
         etParola = (EditText) findViewById(R.id.etParola);
         btnGiris = (Button) findViewById(R.id.btGiris);
 
         kullaniciKnt();//kayıtlı kullanıcı olup olmadığını kontrol et, yoksa yeni kullanıcı kayıt yap
+
         ayarBilgileriGetir();
+
         Sabitler.yaziBoyutu = ayar.getMetinBoyutu();
 
         if (ayar.getSilmeDurum() == 1) {
@@ -66,30 +68,15 @@ public class MainActivity extends AppCompatActivity {
         dba.ac();
         ayar = dba.ayarlar();
         Sabitler.PASS_MD5 = ayar.getPassword();
-        Sabitler.FAKE_PASS_MD5 = ayar.getFakePassword();
         Sabitler.yaziBoyutu = ayar.getMetinBoyutu();
         dba.kapat();
     }
 
     public void giris() {
         boolean passDrm = passwordKonrol(etParola.getText().toString());
-        boolean fakeDrm = fakePasswordKonrol(etParola.getText().toString());
 
 
-  /*      if (fakeDrm == true) {
-            //FAKE PASSWORD GİRİLDİ İSE TÜM VT SİL !!!!!
-            NotesDatabase db = new NotesDatabase(MainActivity.this);
-            db.ac();
-            db.tumNotlariSil();
-            db.kapat();
-
-            Toast.makeText(getApplicationContext(),
-                    "Incorrect password", Toast.LENGTH_SHORT).show();
-
-        } else
-          */
-
-            if (passDrm == true) {
+        if (passDrm == true) {
             //parolayı Sabitler sayfasında yaz
             Sabitler.loginPassword = etParola.getText().toString();
 
@@ -108,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 //Veritabanından tüm notları al getir
         NotesDatabase dba = new NotesDatabase(MainActivity.this);
         dba.ac();
-        List<Not> notlar = dba.tumKayitlar();
+        List<Note> notlar = dba.tumKayitlar();
         //notları tarihlerine göre kontrol et ve silinecek olanları sil
         if (notlar.size() > 0) {
             List<Integer> silinecekler = new ArrayList<Integer>();
@@ -132,10 +119,10 @@ public class MainActivity extends AppCompatActivity {
     private void kullaniciKnt() {
         UserDatabase db = new UserDatabase(MainActivity.this);
         db.ac();
-        int drm = db.kullaniciVarmiKontrolEt();
+        boolean drm = db.kullaniciVarmiKontrolEt();
         db.kapat();
 
-        if (drm == 0) {
+        if (!drm) {
             //kullanÄ±cÄ± kayÄ±t sayfasÄ±na git
             Intent i = new Intent(this,
                     KullaniciKayitActivity.class);
@@ -145,29 +132,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private boolean fakePasswordKonrol(String fakePassword) {
-        UserDatabase db = new UserDatabase(MainActivity.this);
-        db.ac();
-        Crypt crypt = new Crypt();
-        try {
-            boolean y = db.fakePasswordKonrolEt(MD5.md5Sifrele(crypt.encrypt(fakePassword, fakePassword)));
-            db.kapat();
-            return y;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-
-    }
-
     private boolean passwordKonrol(String password) {
         UserDatabase db = new UserDatabase(MainActivity.this);
         db.ac();
-        Crypt crypt = new Crypt();
+
         boolean y = false;
         try {
-            y = db.passwordKonrolEt(MD5.md5Sifrele(crypt.encrypt(password, password)));
+            y = db.passwordKonrolEt(new Crypt().encrypt(password, password));
             db.kapat();
             return y;
         } catch (Exception e) {

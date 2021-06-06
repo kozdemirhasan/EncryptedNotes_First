@@ -1,6 +1,6 @@
 package com.kozdemirhasan.encryptednotes.pojo;
 
-public class Not {
+public class Note {
     public int _id;
     public String konu;
     public String icerik;
@@ -9,17 +9,17 @@ public class Not {
     public long trh;
 
 
-    public Not() {
+    public Note() {
     }
 
-    public Not(int _id, long trh) {
+    public Note(int _id, long trh) {
         this._id = _id;
         this.trh = trh;
     }
 
 
 
-    public Not(int _id, String konu, String icerik, String kayittarihi) {
+    public Note(int _id, String konu, String icerik, String kayittarihi) {
         this._id = _id;
         this.konu = konu;
         this.icerik = icerik;
@@ -27,7 +27,7 @@ public class Not {
 
     }
 
-    public Not(int _id, String konu, String icerik, String kayittarihi, String grup) {
+    public Note(int _id, String konu, String icerik, String kayittarihi, String grup) {
         this._id = _id;
         this.konu = konu;
         this.icerik = icerik;
@@ -35,7 +35,7 @@ public class Not {
         this.grup = grup;
     }
 
-    public Not(int _id, String grup, String konu, String icerik, long trh) {
+    public Note(int _id, String grup, String konu, String icerik, long trh) {
         this._id = _id;
         this.konu = konu;
         this.icerik = icerik;

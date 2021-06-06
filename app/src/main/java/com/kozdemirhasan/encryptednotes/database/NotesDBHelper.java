@@ -12,12 +12,12 @@ import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 
 public class NotesDBHelper extends SQLiteOpenHelper {
 
-    private static final String CREATE_TABLE_NOTLAR = "create table " + Sabitler.TABLO_NOTLAR
+    private static final String CREATE_TABLE_NOTLAR = "create table " + Sabitler.TABLO_NOTES_NAME
             + " (" + Sabitler.KEY_NOT_ID + " integer primary key autoincrement, "
-            + Sabitler.ROW_NOT_BASLIK + " text  not null, "
-            + Sabitler.ROW_NOT_ICERIK + " text  not null, "
-            + Sabitler.ROW_NOT_GRUP + " text not null, "
-            + Sabitler.ROW_NOT_TARIH + " longtext  not null);";
+            + Sabitler.ROW_NOTE_TITLE + " text  not null, "
+            + Sabitler.ROW_NOTE_BODY + " text  not null, "
+            + Sabitler.ROW_NOTE_GROUP + " text not null, "
+            + Sabitler.ROW_NOTE_DATE + " longtext  not null);";
 
     public NotesDBHelper(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -43,7 +43,7 @@ public class NotesDBHelper extends SQLiteOpenHelper {
 * Yenisi geldiğinde eski tablodaki tüm veriler silinecek ve
 * tablo yeniden oluşturulacak.
 */
-        db.execSQL("drop table if exists " + Sabitler.TABLO_NOTLAR);
+        db.execSQL("drop table if exists " + Sabitler.TABLO_NOTES_NAME);
         onCreate(db);
     }
 }

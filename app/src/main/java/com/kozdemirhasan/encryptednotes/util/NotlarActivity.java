@@ -48,8 +48,7 @@ import com.kozdemirhasan.encryptednotes.database.UserDatabase;
 import com.kozdemirhasan.encryptednotes.R;
 
 import com.kozdemirhasan.encryptednotes.pojo.Crypt;
-import com.kozdemirhasan.encryptednotes.pojo.MD5;
-import com.kozdemirhasan.encryptednotes.pojo.Not;
+import com.kozdemirhasan.encryptednotes.pojo.Note;
 import com.kozdemirhasan.encryptednotes.pojo.Sabitler;
 import com.kozdemirhasan.encryptednotes.pojo.SimpleFileDialog;
 
@@ -79,9 +78,9 @@ public class NotlarActivity extends AppCompatActivity {
     ExpandableListView expListView;
     ExpListAdapter adapter;
     ArrayList<String> gruplar;
-    ArrayList<Not> notlar;
-    HashMap<String, ArrayList<Not>> icerik;
-    Not not;
+    ArrayList<Note> notlar;
+    HashMap<String, ArrayList<Note>> icerik;
+    Note note;
 
     String eskiPass;
     String yeniPass1;
@@ -105,7 +104,7 @@ public class NotlarActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.notlar);
-        setTitle("My Notes");
+        setTitle("Encrypted Notes");
 
 
         fab = findViewById(R.id.fab);
@@ -145,7 +144,7 @@ public class NotlarActivity extends AppCompatActivity {
 
 
         expListView = (ExpandableListView) findViewById(R.id.exp_list);
-        icerik = new HashMap<String, ArrayList<Not>>();
+        icerik = new HashMap<String, ArrayList<Note>>();
 
         notlariGetir();
 
@@ -211,7 +210,7 @@ public class NotlarActivity extends AppCompatActivity {
 
         //Curson tipinde gelen notları teker teker dolaşıyoruz
         if (cursor != null) {
-            Not searchNot;
+            Note searchNot;
 
             HashSet<String> searchGruplar = new HashSet<>();
 
@@ -227,7 +226,7 @@ public class NotlarActivity extends AppCompatActivity {
                     //    String body = new Crypt().decrypt(cursor.getString(cursor.getColumnIndex("icerik")), Sabitler.loginPassword);
 
                     if (title.contains(searchWort) || body.contains(searchWort)) {
-                        searchNot = new Not();
+                        searchNot = new Note();
                         searchNot.set_id(id);
                         searchNot.setGrup(grup);
                         searchNot.setKonu(title);
@@ -246,7 +245,7 @@ public class NotlarActivity extends AppCompatActivity {
             }
 
             for (int i = 0; i < gruplar.size(); i++) {
-                ArrayList<Not> gecici = new ArrayList<>();
+                ArrayList<Note> gecici = new ArrayList<>();
                 for (int j = 0; j < notlar.size(); j++) {
                     if (gruplar.get(i).equals(notlar.get(j).getGrup())) {
                         gecici.add(notlar.get(j));
@@ -318,11 +317,11 @@ public class NotlarActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Show") {
-            notDetayGoruntule(not.get_id());
+            notDetayGoruntule(note.get_id());
         } else if (item.getTitle() == "Edit") {
             notGuncelle();
         } else if (item.getTitle() == "Delete") {
-            notSil(not.get_id());
+            notSil(note.get_id());
 
         }
         return true;
@@ -348,15 +347,7 @@ public class NotlarActivity extends AppCompatActivity {
 
             parolaDegistir();
 
-        } else if (item.getTitle().equals("Fake password change")) {
-            //change fake password
-            eskiFakePass = null;
-            yeniFakePass1 = null;
-            yeniFakePass2 = null;
-
-            fakeParolaDegistir();
-
-        } else if (item.getTitle().equals("Back up data")) {
+        }else if (item.getTitle().equals("Back up data")) {
 
             //  chooseImage();
             backUpData();
@@ -563,7 +554,7 @@ public class NotlarActivity extends AppCompatActivity {
         //Veritabanından notu al getir
         NotesDatabase dba = new NotesDatabase(NotlarActivity.this);
         dba.ac();
-        Not notGiden = dba.notGetir(String.valueOf(not.get_id()));//not değişkene atandı
+        Note notGiden = dba.notGetir(String.valueOf(note.get_id()));//note değişkene atandı
         dba.kapat();
 
         Crypt crypt = new Crypt();
@@ -588,7 +579,7 @@ public class NotlarActivity extends AppCompatActivity {
         final Crypt crypt = new Crypt();
         String konu = null;
         try {
-            konu = crypt.decrypt(not.getKonu(), Sabitler.loginPassword);
+            konu = crypt.decrypt(note.getKonu(), Sabitler.loginPassword);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -609,7 +600,7 @@ public class NotlarActivity extends AppCompatActivity {
                                 dba.kapat();
 
                                 int duration = Toast.LENGTH_SHORT;
-                                //Not silindikten sonra silindi olarak bildir.
+                                //Note silindikten sonra silindi olarak bildir.
                                 Toast toast = null;
                                 try {
                                     toast = Toast.makeText(getApplicationContext(),
@@ -668,7 +659,7 @@ public class NotlarActivity extends AppCompatActivity {
                     eskiFakePass = null;
                     yeniFakePass1 = null;
                     yeniFakePass2 = null;
-                    fakeParolaDegistir();
+
 
                 } else if (secilen.toString().equals("Verileri yedekle")) {
 
@@ -892,14 +883,7 @@ public class NotlarActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this); // Daha sonra AlerDialog.Builder'ı oluşturuyoruz.
         builder.setTitle("Change Password");
 
-        builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-
-        }); // Buttonu ve tıklanma olayını ekledik. İster tıklanma olayına bir şeyler yazarsınız, ister de boş bırakırsınız. Size kalmış. Biz boş bıraktık. Tıklantığında diyalog kapanacak.
-
-        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 //parola değiştir
                 eskiPass = et1.getText().toString();
@@ -910,17 +894,14 @@ public class NotlarActivity extends AppCompatActivity {
                 Crypt crypt = new Crypt();
                 String yeni_pass_md5 = null;
                 try {
-                    yeni_pass_md5 = MD5.md5Sifrele(crypt.encrypt(yeniPass1, yeniPass1));
+                    yeni_pass_md5 = new Crypt().encrypt(yeniPass1, yeniPass1);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                //yeni password mevcut fake password ile eşit olamaz
-                if (yeni_pass_md5.equals(Sabitler.FAKE_PASS_MD5)) {
-                    Toast.makeText(NotlarActivity.this,
-                            "Warning...\nNew password cannot be the same as fake password available", Toast.LENGTH_SHORT).show();
-                    parolaDegistir();
-                } else if (yeniPass1.length() < 6) {
+
+
+                if (yeniPass1.length() < 6) {
                     Toast.makeText(NotlarActivity.this,
                             "Warning...\nPassword must be at least 6 characters long", Toast.LENGTH_SHORT).show();
                     parolaDegistir();
@@ -939,6 +920,14 @@ public class NotlarActivity extends AppCompatActivity {
                     parolaDegistir();
 
                 }
+            }
+
+        }); // Buttonu ve tıklanma olayını ekledik. İster tıklanma olayına bir şeyler yazarsınız, ister de boş bırakırsınız. Size kalmış.
+            // Biz boş bıraktık. Tıklantığında diyalog kapanacak.
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int i) {
+
 
             }
 
@@ -956,13 +945,13 @@ public class NotlarActivity extends AppCompatActivity {
         // tüm notlari getir
         NotesDatabase ndb = new NotesDatabase(NotlarActivity.this);
         ndb.ac();
-        List<Not> butunNotlar = ndb.butunNotlar();
+        List<Note> butunNotlar = ndb.butunNotlar();
         Crypt crypt = new Crypt();
-        Not notYeni;
+        Note notYeni;
 
         try {
             if (butunNotlar.size() > 0) {
-                for (Not notGelen : butunNotlar) {
+                for (Note notGelen : butunNotlar) {
                     //herbir notu tek tek yeni parolaya göre crypt la
                     int id = notGelen.get_id();
                     String grupx = crypt.decrypt(notGelen.getGrup(), eskiParola);//kriptoludan normale çevir
@@ -976,7 +965,7 @@ public class NotlarActivity extends AppCompatActivity {
 
                     //notları önce decrypt et, sonra yeni parolaile encrtypt et ve vt yaz
                     //(id, konu, içerik, tarih, grup) sıralı
-                    notYeni = new Not(id, grp, bskl, icrk, tarihx);
+                    notYeni = new Note(id, grp, bskl, icrk, tarihx);
                     ndb.notlariYenidenYaz(notYeni);
                 }
 
@@ -999,7 +988,7 @@ public class NotlarActivity extends AppCompatActivity {
             //YENİ PAROLAYI GİRİŞDEKİ DEĞERLERİNE SET ETTİK
             try {
                 Sabitler.loginPassword = yeniPass1;
-                Sabitler.PASS_MD5 = MD5.md5Sifrele(crypt.encrypt(yeniParola, yeniParola));
+                Sabitler.PASS_MD5 = new Crypt().encrypt(yeniParola, yeniParola);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1010,135 +999,9 @@ public class NotlarActivity extends AppCompatActivity {
         ndb.kapat();
     }
 
-    public void fakeParolaDegistir() {
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        final EditText et1 = new EditText(this);
-        final EditText et2 = new EditText(this);
-        final EditText et3 = new EditText(this);
-
-        et1.setHint("mevcut fake parola");
-        et2.setHint("fake parola");
-        et3.setHint("fake parola (tekrar)");
-
-        //eğer veri girimişse onalrı set ediyoruz alanlara
-        et1.setText(eskiFakePass);
-        et2.setText(yeniFakePass1);
-        et3.setText(yeniFakePass2);
-
-        et1.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        et1.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        et2.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        et2.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        et3.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        et3.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
-        layout.addView(et1);
-        layout.addView(et2);
-        layout.addView(et3);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this); // Daha sonra AlerDialog.Builder'ı oluşturuyoruz.
-        builder.setTitle("Fake Parola Değiştir");
-
-        builder.setPositiveButton("İptal", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }); // Buttonu ve tıklanma olayını ekledik. İster tıklanma olayına bir şeyler yazarsınız,
-        // ister de boş bırakırsınız. Size kalmış. Biz boş bıraktık. Tıklantığında diyalog kapanacak.
 
 
-        builder.setNegativeButton("Tamam", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //fake parola değiştir
-                eskiFakePass = et1.getText().toString();
-                yeniFakePass1 = et2.getText().toString();
-                yeniFakePass2 = et3.getText().toString();
 
-                boolean passDrm = fakePasswordKonrol(eskiFakePass);
-                int knt = 0;
-
-                Crypt crypt = new Crypt();
-                String yeni_fakepass_md5 = null;
-                try {
-                    yeni_fakepass_md5 = MD5.md5Sifrele(crypt.encrypt(yeniFakePass1, yeniFakePass1));
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //KONTROLLER.....
-                if (!yeniFakePass1.equals(yeniFakePass2)) {
-                    Toast.makeText(NotlarActivity.this,
-                            "UYARI...\nFake parola ve fake parola (tekrar) aynı olmalıdır", Toast.LENGTH_SHORT).show();
-                    fakeParolaDegistir();
-                } else if (yeniFakePass1.length() < 4 || (yeniFakePass2.length() < 4)) {
-                    Toast.makeText(NotlarActivity.this,
-                            "UYARI...\nFake parola en az 4 karakter olmalıdır", Toast.LENGTH_SHORT).show();
-                    fakeParolaDegistir();
-
-                } else if (!yeniFakePass1.equals(yeniFakePass2)) {
-                    Toast.makeText(NotlarActivity.this,
-                            "UYARI...\nYeni fake parola ve fake parola (tekrar) eşit olmalıdır", Toast.LENGTH_SHORT).show();
-                    fakeParolaDegistir();
-                } else if (yeni_fakepass_md5.equals(Sabitler.PASS_MD5)) {
-                    Toast.makeText(NotlarActivity.this,
-                            "UYARI...\nYeni fake parola mevcut parola ile aynı olamaz!!!", Toast.LENGTH_SHORT).show();
-                    fakeParolaDegistir();
-                } else if (passDrm == true &&
-                        yeniFakePass1.equals(yeniFakePass2) && !yeniFakePass1.equals("")) {
-
-                    UserDatabase dba = new UserDatabase(NotlarActivity.this);
-                    dba.ac();
-                    knt = dba.fakeParolaDegistir(eskiFakePass, yeniFakePass1);
-                    dba.kapat();
-
-                    if (knt != -1) {
-                        try {
-                            Toast.makeText(NotlarActivity.this, "Fake parola değiştirildi", Toast.LENGTH_SHORT).show();
-                            Sabitler.FAKE_PASS_MD5 = MD5.md5Sifrele(crypt.encrypt(yeniFakePass1, yeniFakePass1));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    } else {
-                        Toast.makeText(NotlarActivity.this, "Parola değiştirmede HATA OLUŞTU!!!", Toast.LENGTH_SHORT).show();
-                    }
-
-                } else {
-                    Toast.makeText(NotlarActivity.this,
-                            "Bilgileri kontrol edip tekarar deneyiniz", Toast.LENGTH_SHORT).show();
-                    fakeParolaDegistir();
-                }
-
-
-            }
-
-        }); // Buttonu ve tıklanma olayını ekledik. İster tıklanma olayına bir şeyler yazarsınız, ister de boş bırakırsınız. Size kalmış. Biz boş bıraktık.
-        builder.setView(layout);
-        AlertDialog alert = builder.create(); // Daha sonra builder'ı AlertDialog'a aktarıyoruz.
-        alert.show();// En sonunda ise AlertDialog'umuzu gösteriyoruz.
-//Özelleştirme isteğinize göre satır sayısı artabilir. Ancak temel mantık şu: Bir builder oluşturuyoruz. Ona gerekli eklemeyi ve düzenlemeyi yapıyoruz. Daha sonra bunu AlertDialog'a aktarıyoruz ve show metoduyla gösteriyoruz.
-
-
-    }
-
-    private boolean fakePasswordKonrol(String fakePassword) {
-        UserDatabase db = new UserDatabase(NotlarActivity.this);
-        db.ac();
-        Crypt crypt = new Crypt();
-        try {
-            boolean y = db.fakePasswordKonrolEt(MD5.md5Sifrele(crypt.encrypt(fakePassword, fakePassword)));
-            db.kapat();
-            return y;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-
-    }
 
     private boolean passwordKonrol(String password) {
         UserDatabase db = new UserDatabase(NotlarActivity.this);
@@ -1146,7 +1009,7 @@ public class NotlarActivity extends AppCompatActivity {
         Crypt crypt = new Crypt();
         boolean y = false;
         try {
-            y = db.passwordKonrolEt(MD5.md5Sifrele(crypt.encrypt(password, password)));
+            y = db.passwordKonrolEt(new Crypt().encrypt(password, password));
             db.kapat();
             return y;
         } catch (Exception e) {
@@ -1174,8 +1037,8 @@ public class NotlarActivity extends AppCompatActivity {
         getExpListView().setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                not = (Not) adapter.getChild(groupPosition, childPosition);
-                notDetayGoruntule(not.get_id());
+                note = (Note) adapter.getChild(groupPosition, childPosition);
+                notDetayGoruntule(note.get_id());
 
                 //  Sabitler.state = expListView.onSaveInstanceState(); //listview pozisyon kaydet
                 return false;
@@ -1204,7 +1067,7 @@ public class NotlarActivity extends AppCompatActivity {
                     int groupPosition = ExpandableListView.getPackedPositionGroup(id);
                     int childPosition = ExpandableListView.getPackedPositionChild(id);
 
-                    not = (Not) adapter.getChild(groupPosition, childPosition);
+                    note = (Note) adapter.getChild(groupPosition, childPosition);
                     registerForContextMenu(expListView);
 
                     // You now have everything that you would as if this was an OnChildClickListener()

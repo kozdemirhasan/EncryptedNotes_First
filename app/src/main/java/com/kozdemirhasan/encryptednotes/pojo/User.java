@@ -4,45 +4,43 @@ package com.kozdemirhasan.encryptednotes.pojo;
  * Created by Casper on 17.02.2018.
  */
 
-public class Kullanici {
-    int kullaniciId;
+public class User {
+    int userId;
     String password;
-    String fakePassword;
     int silmeDurum;
     int silmeGun;
     int metinBoyutu;
 
-    public Kullanici() {
+    public User() {
     }
 
-    public Kullanici(int kullaniciId, String password, String fakePassword) {
-        this.kullaniciId = kullaniciId;
+    public User(int userId, String password) {
+        this.userId = userId;
         this.password = password;
-        this.fakePassword = fakePassword;
+
     }
 
-    public Kullanici(int kullaniciId, String password, String fakePassword, int silmeDurum, int silmeGun, int metinBoyutu) {
-        this.kullaniciId = kullaniciId;
+    public User(int userId, String password,  int silmeDurum, int silmeGun, int metinBoyutu) {
+        this.userId = userId;
         this.password = password;
-        this.fakePassword = fakePassword;
+              this.silmeDurum = silmeDurum;
+        this.silmeGun = silmeGun;
+        this.metinBoyutu = metinBoyutu;
+    }
+
+    public User(int silmeDurum, int silmeGun, int metinBoyutu) {
+
         this.silmeDurum = silmeDurum;
         this.silmeGun = silmeGun;
         this.metinBoyutu = metinBoyutu;
     }
 
-    public Kullanici(String fakePassword, int silmeDurum, int silmeGun, int metinBoyutu) {
-        this.fakePassword = fakePassword;
-        this.silmeDurum = silmeDurum;
-        this.silmeGun = silmeGun;
-        this.metinBoyutu = metinBoyutu;
+    public int getUserId() {
+        return userId;
     }
 
-    public int getKullaniciId() {
-        return kullaniciId;
-    }
-
-    public void setKullaniciId(int kullaniciId) {
-        this.kullaniciId = kullaniciId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -51,14 +49,6 @@ public class Kullanici {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getFakePassword() {
-        return fakePassword;
-    }
-
-    public void setFakePassword(String fakePassword) {
-        this.fakePassword = fakePassword;
     }
 
     public int getSilmeDurum() {

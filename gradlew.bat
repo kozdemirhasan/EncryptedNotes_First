@@ -24,7 +24,7 @@ set JAVA_EXE=java.exe
 if "%ERRORLEVEL%" == "0" goto init
 
 echo.
-echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+echo ERROR: JAVA_HOME is note set and no 'java' command could be found in your PATH.
 echo.
 echo Please set the JAVA_HOME variable in your environment to match the
 echo location of your Java installation.
@@ -48,7 +48,7 @@ goto fail
 :init
 @rem Get command-line arguments, handling Windowz variants
 
-if not "%OS%" == "Windows_NT" goto win9xME_args
+if note "%OS%" == "Windows_NT" goto win9xME_args
 if "%@eval[2+2]" == "4" goto 4NT_args
 
 :win9xME_args
@@ -81,7 +81,7 @@ if "%ERRORLEVEL%"=="0" goto mainEnd
 :fail
 rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
 rem the _cmd.exe /c_ return code!
-if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
+if  note "" == "%GRADLE_EXIT_CONSOLE%" exit 1
 exit /b 1
 
 :mainEnd
